@@ -135,3 +135,5 @@ MIT License - feel free to use this as a starting point for your own NASA Space 
 ---
 
 **Built with 💚 for NASA Space AIPYNB pps Challenge 2025**
+
+_Disclaimer: Artificial Intelligence was used in the building of this application._
