@@ -11,7 +11,7 @@ interface CellData {
   cropType: string
   temperature: number // Celsius
   nitrogen_level: number // 0-100
-  rainfall: number // mm per month
+  organic_matter: number // percentage 0-100
   soil_ph: number // 1-14
   irrigation_frequency: number // times per week
   fertilizer_amount: number // kg per hectare
@@ -143,7 +143,7 @@ export default function Simple2DFarm({ farm, season, onSeasonChange }: Simple2DF
         cropType: farm.type,
         temperature: cellGeoData.temperature + (Math.random() - 0.5) * 5, // ±2.5°C variation
         nitrogen_level: 40 + Math.random() * 40, // 40-80%
-        rainfall: 50 + Math.random() * 100, // 50-150mm per month
+        organic_matter: 20 + Math.random() * 60, // 20-80% organic matter
         soil_ph: cellGeoData.soilPH + (Math.random() - 0.5) * 1, // ±0.5 pH variation
         irrigation_frequency: 2 + Math.random() * 5, // 2-7 times per week
         fertilizer_amount: 100 + Math.random() * 200, // 100-300 kg per hectare
@@ -177,7 +177,7 @@ export default function Simple2DFarm({ farm, season, onSeasonChange }: Simple2DF
     // Calculate average parameters across all cells
     const avgTemp = cells.reduce((sum, cell) => sum + cell.temperature, 0) / cells.length
     const avgNitrogen = cells.reduce((sum, cell) => sum + cell.nitrogen_level, 0) / cells.length
-    const avgRainfall = cells.reduce((sum, cell) => sum + cell.rainfall, 0) / cells.length
+    const avgOrganicMatter = cells.reduce((sum, cell) => sum + cell.organic_matter, 0) / cells.length
     const avgSoilPH = cells.reduce((sum, cell) => sum + cell.soil_ph, 0) / cells.length
     const avgIrrigation = cells.reduce((sum, cell) => sum + cell.irrigation_frequency, 0) / cells.length
     const avgFertilizer = cells.reduce((sum, cell) => sum + cell.fertilizer_amount, 0) / cells.length
@@ -222,12 +222,12 @@ export default function Simple2DFarm({ farm, season, onSeasonChange }: Simple2DF
       recommendations.push('Increase nitrogen-rich fertilizer application')
     }
     
-    if (avgRainfall < 80) {
-      riskFactors.push('Insufficient rainfall')
-      recommendations.push('Increase irrigation frequency')
-    } else if (avgRainfall > 200) {
-      riskFactors.push('Excessive rainfall')
-      recommendations.push('Improve drainage systems')
+    if (avgOrganicMatter < 30) {
+      riskFactors.push('Low organic matter content')
+      recommendations.push('Add compost or organic fertilizers to improve soil structure')
+    } else if (avgOrganicMatter > 80) {
+      riskFactors.push('Excessive organic matter')
+      recommendations.push('Balance organic matter levels for optimal nutrient availability')
     }
     
     if (avgIrrigation < 2) {
@@ -239,7 +239,7 @@ export default function Simple2DFarm({ farm, season, onSeasonChange }: Simple2DF
     if (avgTemp >= optimal.tempMin && avgTemp <= optimal.tempMax) healthScore += 5
     if (avgSoilPH >= optimal.phMin && avgSoilPH <= optimal.phMax) healthScore += 5
     if (avgNitrogen >= optimal.nitrogenMin) healthScore += 5
-    if (avgRainfall >= 80 && avgRainfall <= 200) healthScore += 3
+    if (avgOrganicMatter >= 30 && avgOrganicMatter <= 70) healthScore += 3
     
     healthScore = Math.min(95, Math.max(70, healthScore))
     
@@ -301,7 +301,7 @@ export default function Simple2DFarm({ farm, season, onSeasonChange }: Simple2DF
                 <div className="text-xs text-gray-600 mb-1">TEMPERATURE (°C)</div>
                 <input
                   type="number"
-                  value={Math.round(cells[selectedCell].temperature * 10) / 10}
+                  value={Math.round((cells[selectedCell]?.temperature || 0) * 10) / 10}
                   onChange={(e) => handleParameterChange(selectedCell, 'temperature', parseFloat(e.target.value) || 0)}
                   className="w-full font-mono text-sm font-bold text-blue-600 bg-transparent border-none outline-none"
                   step="0.1"
@@ -313,7 +313,7 @@ export default function Simple2DFarm({ farm, season, onSeasonChange }: Simple2DF
                 <div className="text-xs text-gray-600 mb-1">NITROGEN LEVEL (%)</div>
                 <input
                   type="number"
-                  value={Math.round(cells[selectedCell].nitrogen_level)}
+                  value={Math.round(cells[selectedCell]?.nitrogen_level || 0)}
                   onChange={(e) => handleParameterChange(selectedCell, 'nitrogen_level', parseInt(e.target.value) || 0)}
                   className="w-full font-mono text-sm font-bold text-green-600 bg-transparent border-none outline-none"
                   min="0"
@@ -321,21 +321,21 @@ export default function Simple2DFarm({ farm, season, onSeasonChange }: Simple2DF
                 />
               </div>
               <div className="bg-white p-3 rounded border">
-                <div className="text-xs text-gray-600 mb-1">RAINFALL (mm/month)</div>
+                <div className="text-xs text-gray-600 mb-1">ORGANIC MATTER (%)</div>
                 <input
                   type="number"
-                  value={Math.round(cells[selectedCell].rainfall)}
-                  onChange={(e) => handleParameterChange(selectedCell, 'rainfall', parseInt(e.target.value) || 0)}
-                  className="w-full font-mono text-sm font-bold text-blue-600 bg-transparent border-none outline-none"
+                  value={Math.round(cells[selectedCell]?.organic_matter || 0)}
+                  onChange={(e) => handleParameterChange(selectedCell, 'organic_matter', parseInt(e.target.value) || 0)}
+                  className="w-full font-mono text-sm font-bold text-green-600 bg-transparent border-none outline-none"
                   min="0"
-                  max="500"
+                  max="100"
                 />
               </div>
               <div className="bg-white p-3 rounded border">
                 <div className="text-xs text-gray-600 mb-1">SOIL PH</div>
                 <input
                   type="number"
-                  value={Math.round(cells[selectedCell].soil_ph * 10) / 10}
+                  value={Math.round((cells[selectedCell]?.soil_ph || 7) * 10) / 10}
                   onChange={(e) => handleParameterChange(selectedCell, 'soil_ph', parseFloat(e.target.value) || 7)}
                   className="w-full font-mono text-sm font-bold text-purple-600 bg-transparent border-none outline-none"
                   step="0.1"
@@ -347,7 +347,7 @@ export default function Simple2DFarm({ farm, season, onSeasonChange }: Simple2DF
                 <div className="text-xs text-gray-600 mb-1">IRRIGATION FREQ (/week)</div>
                 <input
                   type="number"
-                  value={Math.round(cells[selectedCell].irrigation_frequency * 10) / 10}
+                  value={Math.round((cells[selectedCell]?.irrigation_frequency || 1) * 10) / 10}
                   onChange={(e) => handleParameterChange(selectedCell, 'irrigation_frequency', parseFloat(e.target.value) || 1)}
                   className="w-full font-mono text-sm font-bold text-blue-600 bg-transparent border-none outline-none"
                   step="0.1"
@@ -359,7 +359,7 @@ export default function Simple2DFarm({ farm, season, onSeasonChange }: Simple2DF
                 <div className="text-xs text-gray-600 mb-1">FERTILIZER (kg/ha)</div>
                 <input
                   type="number"
-                  value={Math.round(cells[selectedCell].fertilizer_amount)}
+                  value={Math.round(cells[selectedCell]?.fertilizer_amount || 0)}
                   onChange={(e) => handleParameterChange(selectedCell, 'fertilizer_amount', parseInt(e.target.value) || 0)}
                   className="w-full font-mono text-sm font-bold text-green-600 bg-transparent border-none outline-none"
                   min="0"
@@ -372,26 +372,26 @@ export default function Simple2DFarm({ farm, season, onSeasonChange }: Simple2DF
               <div className="flex items-center justify-between mb-2">
                 <div className="text-xs text-gray-600">HEALTH STATUS</div>
                 <div className={`w-3 h-3 rounded-full ${
-                  cells[selectedCell].health > 80 ? 'bg-green-500' :
-                  cells[selectedCell].health > 60 ? 'bg-yellow-500' :
+                  (cells[selectedCell]?.health || 0) > 80 ? 'bg-green-500' :
+                  (cells[selectedCell]?.health || 0) > 60 ? 'bg-yellow-500' :
                   'bg-red-500'
                 }`} />
               </div>
               <div className="text-2xl font-mono font-bold mb-1">
                 <span className={`${
-                  cells[selectedCell].health > 80 ? 'text-green-600' :
-                  cells[selectedCell].health > 60 ? 'text-yellow-600' :
+                  (cells[selectedCell]?.health || 0) > 80 ? 'text-green-600' :
+                  (cells[selectedCell]?.health || 0) > 60 ? 'text-yellow-600' :
                   'text-red-600'
-                }`}>{Math.round(cells[selectedCell].health)}%</span>
+                }`}>{Math.round(cells[selectedCell]?.health || 0)}%</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
                   className={`h-2 rounded-full transition-all ${
-                    cells[selectedCell].health > 80 ? 'bg-green-500' :
-                    cells[selectedCell].health > 60 ? 'bg-yellow-500' :
+                    (cells[selectedCell]?.health || 0) > 80 ? 'bg-green-500' :
+                    (cells[selectedCell]?.health || 0) > 60 ? 'bg-yellow-500' :
                     'bg-red-500'
                   }`}
-                  style={{ width: `${cells[selectedCell].health}%` }}
+                  style={{ width: `${cells[selectedCell]?.health || 0}%` }}
                 />
               </div>
             </div>
