@@ -98,5 +98,3 @@ MIT License - feel free to use this as a starting point for your own NASA Space 
 
 **Built with 💚 for NASA Space Apps Challenge 2025**  
 *Connecting Earth and Space through Agricultural Innovation*
-
-
