@@ -5,10 +5,9 @@ A minimalist web game for the NASA Space Apps Challenge where players manage vir
 ## Features
 
 - 🔐 **Google OAuth Login** - Seamless authentication with Google accounts
-- 🗺️ **Global Farm Selection** - Choose from 8 real-world farm locations across different continents
+- 🗺️ **Interactive Globe Map** - Select farms directly from an interactive 3D globe showing real-world locations across different continents
 - 🎮 **Farm Management Game** - Monitor crops, manage resources, and optimize yields
 - 🛰️ **Space-themed UI** - Minimal dark design with space/satellite aesthetics
-- 📱 **Responsive Design** - Works on desktop and mobile devices
 
 ## Technologies Used
 
@@ -19,119 +18,85 @@ A minimalist web game for the NASA Space Apps Challenge where players manage vir
 - **Google Fonts** (Space Mono, Orbitron) for that cool tech look
 - **Lucide React** for icons
 
-## Quick Start
-
-### Prerequisites
-
-- Node.js 18+ installed
-- Google Cloud Console account (for OAuth and Maps API)
-
 ### Installation
 
 1. **Clone and install dependencies:**
    ```bash
-   cd frontend
    npm install
    ```
 
 2. **Set up environment variables:**
    
-   Copy `.env.local` and fill in your credentials:
+   Copy `.env.example` and fill in your credentials:
    ```env
    # NextAuth.js Configuration
-   NEXTAUTH_URL=http://localhost:3000
+   NEXTAUTH_URL=your_domain_url
    NEXTAUTH_SECRET=your_nextauth_secret_here
    
    # Google OAuth Configuration
    GOOGLE_CLIENT_ID=your_google_client_id_here
    GOOGLE_CLIENT_SECRET=your_google_client_secret_here
-   
-   # Google Maps API Key (optional for enhanced map view)
-   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
    ```
 
-3. **Google OAuth Setup:**
-   - Go to [Google Cloud Console](https://console.cloud.google.com/)
-   - Create a new project or select existing one
-   - Enable Google+ API
-   - Create OAuth 2.0 credentials
-   - Add `http://localhost:3000/api/auth/callback/google` to authorized redirect URIs
-
-4. **Run the development server:**
+3. **Run the development server:**
    ```bash
    npm run dev
    ```
 
-5. **Open your browser:**
-   Navigate to [http://localhost:3000](http://localhost:3000)
-
 ## Game Flow
 
 1. **Login** - Authenticate with Google OAuth
-2. **Farm Selection** - Choose from 8 real-world farm locations:
-   - 🌽 Heartland Corn Farm (Iowa, USA)
-   - 🌾 Prairie Gold Wheat (Kansas, USA)
-   - 🍚 Mekong Delta Rice (Vietnam)
-   - ☕ Andean Coffee Estate (Colombia)
-   - 🫘 Cerrado Soybean (Brazil)
-   - 🍅 Mediterranean Tomato (Spain)
-   - 🥔 Andes Potato Farm (Peru)
-   - 🥛 Canterbury Dairy (New Zealand)
+2. **Globe Farm Selection** - Navigate an interactive 3D globe and click to select from real-world satelite map.
 3. **Farm Management** - Monitor crops, manage resources, and complete missions
 
-## Project Structure
+## Screenshots
 
-```
-frontend/
-├── src/
-│   ├── app/
-│   │   ├── api/auth/[...nextauth]/    # NextAuth API routes
-│   │   ├── farm-selection/            # Farm selection page
-│   │   ├── game/                      # Main game interface
-│   │   ├── login/                     # Login page
-│   │   ├── globals.css                # Global styles
-│   │   ├── layout.tsx                 # Root layout
-│   │   └── page.tsx                   # Home page (redirects to login)
-│   ├── components/
-│   │   ├── GoogleMap.tsx              # Google Maps integration (advanced)
-│   │   ├── SimpleMap.tsx              # Simplified map component
-│   │   └── providers.tsx              # NextAuth session provider
-│   └── data/
-│       └── farms.ts                   # Farm location data
-├── .env.local                         # Environment variables
-├── package.json
-└── README.md
-```
+![Farm Selection Globe](./screenshot-0.png)
 
-## Design Philosophy
+![Game Interface](./screenshot-1.png)
 
-- **Minimal & Clean** - Black background with green accent color (#00ff88)
-- **Space Theme** - Using Orbitron and Space Mono fonts for that NASA/space aesthetic
-- **Accessible** - High contrast and clear typography
-- **Responsive** - Mobile-first design approach
+![Farm Dashboard](./screenshot-2.png)
 
-## Next Steps / Future Enhancements
+![3D Farm View](./screenshot-3.png)
 
-- 🛰️ Integration with real NASA Earth observation APIs
-- 📊 Advanced data visualization for crop health
-- 🌦️ Real-time weather data integration
-- 🎯 Achievement system and scoring
-- 👥 Multiplayer capabilities
-- 📈 Historical data and trend analysis
-- 🤖 AI-powered farming recommendations
+![3D Farm View](./screenshot-4.png)
 
-## NASA Space Apps Challenge
+## AI Usage Disclaimer
 
-This project is designed for the NASA Space Apps Challenge, focusing on:
-- Sustainable agriculture
-- Earth observation data utilization
-- Climate adaptation strategies
-- Food security solutions
+**IMPORTANT LEGAL NOTICE:** This project incorporates artificial intelligence (AI) technologies for educational and demonstration purposes in connection with the NASA Space Apps Challenge 2025. The AI-generated content, suggestions, recommendations, and any automated decision-making features within this application are provided "AS IS" without warranty of any kind, express or implied. 
+
+**Users acknowledge and agree that:**
+- AI-generated agricultural recommendations are for simulation purposes only and should not be relied upon for actual farming decisions
+- No liability is assumed for any damages, losses, or adverse outcomes resulting from reliance on AI-generated content
+- The accuracy, completeness, or reliability of AI outputs cannot be guaranteed
+- Users are solely responsible for validating any information before practical application
+- This disclaimer extends to all contributors, maintainers, and affiliated parties
+
+By using this application, you acknowledge that you have read, understood, and agree to be bound by this disclaimer.
 
 ## License
 
 MIT License - feel free to use this as a starting point for your own NASA Space Apps projects!
 
+## Credits & Acknowledgments
+
+**NASA Space Apps Challenge 2025**
+- This project was developed as part of the [NASA Space Apps Challenge](https://www.spaceappschallenge.org/), a global hackathon focused on space exploration and Earth science
+- Special thanks to NASA for providing open data, APIs, and inspiring innovation in space technology
+- Challenge: NASA Farm Navigators: NASA Data Exploration in Agriculture challenge 2025
+- Team: Spaceless
+
+**Data Sources:**
+- NASA POWER API
+- Synthetic Data generated with algorithms
+
+**Technologies & APIs:**
+- NASA Open Data Portal
+- OpenStreetMap
+
 ---
 
-**Built with 💚 for NASA Space AIPYNB pps Challenge 2025**
+**Built with 💚 for NASA Space Apps Challenge 2025**  
+*Connecting Earth and Space through Agricultural Innovation*
+
+
